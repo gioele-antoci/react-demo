@@ -1,7 +1,7 @@
 import logo from './logo.svg'
 import './App.css'
 import TimeTeller from './TimeTeller/TimeTeller'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@material-ui/core'
 
 
@@ -10,15 +10,17 @@ const App = () => {
   const [dateState, setDateState] = useState(new Date());
   const [pausedState, setPausedState] = useState(false);
 
-  setInterval(() => {
-    if (!pausedState) {
-      setDateState(new Date())
-    }
-  }, 1000)
-
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!pausedState) {
+        setDateState(new Date())
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  });
 
   const toggleTimer = () => {
-    setPausedState(!pausedState);
+    setPausedState(prevState => !prevState);
   }
 
   return (
